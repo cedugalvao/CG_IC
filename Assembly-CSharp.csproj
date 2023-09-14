@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\door.cs" />
+    <Compile Include="Assets\cadeira.cs" />
     <Compile Include="Assets\Controle_Player.cs" />
   </ItemGroup>
   <ItemGroup>
