@@ -2,55 +2,55 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Porta : MonoBehaviour
+public class door : MonoBehaviour
 {
     // Distância a partir da qual o jogador pode interagir com a porta
-    public float distanciaInteracao;
+    public float interactionDistance;
 
-    // Nomes das animações de abrir e fechar a porta
-    public string nomeAnimacaoAbrirPorta, nomeAnimacaoFecharPorta;
+    // Os nomes das animações de abrir e fechar a porta
+    public string doorOpenAnimName, doorCloseAnimName;
 
-    // O método Update() é onde as ações ocorrem a cada quadro
+    // O método Update() é onde as coisas acontecem a cada quadro (frame)
     void Update()
     {
-        // Cria um raio que será disparado para a frente a partir da câmera do jogador
-        Ray raio = new Ray(transform.position, transform.forward);
+        // Um raio é criado que será disparado para a frente a partir da câmera do jogador
+        Ray ray = new Ray(transform.position, transform.forward);
 
-        // Variável RaycastHit, que é usada para obter informações do que o raio atinge
-        RaycastHit colisao;
+        // Variável RaycastHit, que é usada para obter informações sobre o que o raio atinge
+        RaycastHit hit;
 
         // Se o raio atingir algo
-        if (Physics.Raycast(raio, out colisao, distanciaInteracao))
+        if (Physics.Raycast(ray, out hit, interactionDistance))
         {
-            // Se o objeto atingido pelo raio tiver a tag "door" (porta)
-            if (colisao.collider.gameObject.tag == "door")
+            // Se o objeto atingido pelo raio estiver marcado como "door" (porta)
+            if (hit.collider.gameObject.tag == "door")
             {
-                // Cria uma variável GameObject para o objeto pai principal da porta
-                GameObject portaPai = colisao.collider.transform.root.gameObject;
+                // Uma variável GameObject é criada para o objeto pai principal da porta
+                GameObject doorParent = hit.collider.transform.root.gameObject;
 
-                // Cria uma variável Animator para o componente Animator da portaPai
-                Animator animacaoPorta = portaPai.GetComponent<Animator>();
+                // Uma variável Animator é criada para o componente Animator do doorParent
+                Animator doorAnim = doorParent.GetComponent<Animator>();
 
                 // Se a tecla E for pressionada
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    // Se o estado atual da animação da porta for a animação de abrir
-                    if (animacaoPorta.GetCurrentAnimatorStateInfo(0).IsName(nomeAnimacaoAbrirPorta))
+                    // Se o estado atual do Animator da porta estiver definido para a animação de abertura
+                    if (doorAnim.GetCurrentAnimatorStateInfo(0).IsName(doorOpenAnimName))
                     {
-                        // Reseta o gatilho da animação de abrir da porta
-                        animacaoPorta.ResetTrigger("open");
+                        // O gatilho de animação de abrir a porta é resetado
+                        doorAnim.ResetTrigger("open");
 
-                        // Aciona o gatilho da animação de fechar (ela é reproduzida)
-                        animacaoPorta.SetTrigger("close");
+                        // O gatilho de animação de fechar a porta é definido (ele é executado)
+                        doorAnim.SetTrigger("close");
                     }
-                    // Se o estado atual da animação da porta for a animação de fechar
-                    if (animacaoPorta.GetCurrentAnimatorStateInfo(0).IsName(nomeAnimacaoFecharPorta))
+                    // Se o estado atual do Animator da porta estiver definido para a animação de fechamento
+                    if (doorAnim.GetCurrentAnimatorStateInfo(0).IsName(doorCloseAnimName))
                     {
-                        // Reseta o gatilho da animação de fechar da porta
-                        animacaoPorta.ResetTrigger("close");
+                        // O gatilho de animação de fechar a porta é resetado
+                        doorAnim.ResetTrigger("close");
 
-                        // Aciona o gatilho da animação de abrir (ela é reproduzida)
-                        animacaoPorta.SetTrigger("open");
+                        // O gatilho de animação de abrir a porta é definido (ele é executado)
+                        doorAnim.SetTrigger("open");
                     }
                 }
             }
